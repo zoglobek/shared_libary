@@ -1,0 +1,40 @@
+- name: Configure monitoring stack
+  hosts: monitor_controller
+  become: yes
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - prometheus
+          - grafana
+          - node_exporter
+          - curl
+          - git
+          - promtail
+        state: present
+        update_cache: yes
+
+    - name: Ensure Prometheus service is running
+      systemd:
+        name: prometheus
+        state: started
+        enabled: yes
+
+    - name: Ensure Grafana service is running
+      systemd:
+        name: grafana-server
+        state: started
+        enabled: yes
+
+    - name: Ensure Node Exporter service is running
+      systemd:
+        name: node_exporter
+        state: started
+        enabled: yes
+    - name: Ensure Promtail service is running
+      systemd:
+        name: promtail
+        state: started
+        enabled: yes
+        
